@@ -1,7 +1,7 @@
 import Access from '../pageobjects/casework.siteaccess'
-import CaseDataTypes from '../pageobjects/casework.casedatatypes'
+import CaseTypes from '../pageobjects/casework.casetypes'
 
-describe('theCaseWork Account Login', () => {
+describe('theCaseWork CRUD test for Case Type workspace', () => {
     it('log in and reach the dashboard', async ()=> {
         await Access.open();
         await Access.login();
@@ -10,25 +10,25 @@ describe('theCaseWork Account Login', () => {
         await Access.cdtNav();
     });
     it('should add a new Case Type', async()=> {
-        await CaseDataTypes.enterNewCaseType();        
+        await CaseTypes.enterNewCaseType();        
     });
     it('should refresh and logout/login, verifying new case type persists', async ()=> {
         await browser.refresh();
-        await expect (CaseDataTypes.createdCaseType).toExist();
+        await expect (CaseTypes.createdCaseType).toExist();
         await Access.logout();
         await Access.login();
         await Access.cdtNav();
-        await expect (CaseDataTypes.createdCaseType).toExist();
+        await expect (CaseTypes.createdCaseType).toExist();
     });
     it ('should remove the created case type', async() => {
-        await CaseDataTypes.removeCaseType();
+        await CaseTypes.removeCaseType();
     });
     it ('case type will still be gone after a refresh and a logout/login', async()=> {
         await browser.refresh();
-        await expect (CaseDataTypes.createdCaseType).not.toExist();
+        await expect (CaseTypes.createdCaseType).not.toExist();
         await Access.logout();
         await Access.login();
         await Access.cdtNav();
-        await expect (CaseDataTypes.createdCaseType).not.toExist();
+        await expect (CaseTypes.createdCaseType).not.toExist();
     });
 })

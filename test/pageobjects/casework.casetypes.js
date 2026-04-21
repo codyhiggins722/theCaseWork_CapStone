@@ -1,7 +1,7 @@
 import Site from './casework.base'
 import { faker } from '@faker-js/faker'
 
-class CaseDataTypes extends Site {
+class CaseTypes extends Site {
     savedRandomLabel = '';
 
     get newCaseType() {
@@ -29,7 +29,28 @@ class CaseDataTypes extends Site {
     async removeCaseType() {
         await this.removeCaseTypeButton.moveTo();
         await this.removeCaseTypeButton.click();
-        await expect (this.removeCaseTypeButton).not.toExist();
+        await expect (this.createdCaseType).not.toExist();
+    }
+    async typeUntilFullCaseTypes() {
+        const input = await this.newCaseType;
+        await input.click();
+        await input.clearValue();
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ";
+        let prevLength = 0;
+        let currLength = 0;
+
+        do{
+            prevLength = (await this.newCaseType.getValue()).length;
+
+            const randomChar = chars.charAt(Math.floor(Math.random() * chars.length));
+            await browser.keys(randomChar);
+
+            currLength = (await this.newCaseType.getValue()).length;
+
+            if (currLength >= 100) break;
+
+        } while (currLength > prevLength);
+        console.log(`The field capped out at ${currLength}`);
     }
 }
-export default new CaseDataTypes();
+export default new CaseTypes();
