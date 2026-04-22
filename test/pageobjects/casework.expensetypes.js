@@ -1,9 +1,7 @@
 import Site from './casework.base'
-import { faker } from '@faker-js/faker'
+import CaseTypes from './casework.casetypes'
 
 class ExpenseTypes extends Site {
-    savedRandomLabel = '';
-
     get newExpenseType() {
         return $('input[data-testid="expense-type-panel-input"]')
     }
@@ -11,17 +9,13 @@ class ExpenseTypes extends Site {
         return $('button[data-testid="expense-type-panel-add-button"]')
     }
     get createdExpenseType() {
-        return $(`//span[contains(text(), "${this.savedRandomLabel}")]`)
+        return $(`//span[contains(text(), "${CaseTypes.savedRandomLabel}")]`)
     }
     get removeExpenseTypeButton() {
-        return $(`button[data-testid="case-data-type-${this.savedRandomLabel}"]`)
-    }
-    generateRandomEntry() {
-        this.savedRandomLabel = faker.word.adjective() + ' ' + faker.word.noun();
-        return this.savedRandomLabel;
+        return $(`button[data-testid="case-data-type-${CaseTypes.savedRandomLabel}"]`)
     }
     async enterNewExpenseType() {
-        const label = this.generateRandomEntry();
+        const label = CaseTypes.generateRandomEntry();
         await this.newExpenseType.setValue(label);
         await this.newExpenseTypeAdd.click();
         await expect (this.createdExpenseType).toExist();
