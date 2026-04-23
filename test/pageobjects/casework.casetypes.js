@@ -3,6 +3,7 @@ import { faker } from '@faker-js/faker'
 
 class CaseTypes extends Site {
     savedRandomLabel = '';
+    allRandomLabels = [];
 
     get newCaseType() {
         return $('input[data-testid="case-type-panel-type-input"]')
@@ -17,7 +18,9 @@ class CaseTypes extends Site {
         return $(`button[data-testid="case-data-type-${this.savedRandomLabel}"]`)
     }
     generateRandomEntry() {
-        this.savedRandomLabel = faker.word.adjective() + ' ' + faker.word.noun();
+        const newLabel = faker.word.adjective() + ' ' + faker.word.noun();
+        this.savedRandomLabel = newLabel;
+        this.allRandomLabels.push(newLabel);
         return this.savedRandomLabel;
     }
     async enterNewCaseType() {
@@ -51,6 +54,13 @@ class CaseTypes extends Site {
 
         } while (currLength > prevLength);
         console.log(`The field capped out at ${currLength}`);
+    }
+    async verifyAllEntries() {
+        await browser.refresh()
+        for (const allRandomLabel of this.allRandomLabels) {
+            const arraylabel = $(`//span[contains(text(), "${allRandomLabel}")]`)
+            await expect (arraylabel).toExist();
+        }
     }
 }
 export default new CaseTypes();
