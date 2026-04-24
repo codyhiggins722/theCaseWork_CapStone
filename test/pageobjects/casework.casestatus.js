@@ -4,6 +4,7 @@ import { faker } from '@faker-js/faker';
 
 class CaseStatus extends Site {
     savedRandomSentence = '';
+    allRandomDescriptions = [];
 
     get newInfoBubble() {
         return $('//label[text()="New"]/following-sibling::button')
@@ -180,9 +181,10 @@ class CaseStatus extends Site {
         let createWindowVisible = false;
 
         while (retries < 5 && createWindowVisible === false) {
+            await this.newCaseStatusAdd
             await this.newCaseStatusAdd.moveTo();
             await this.newCaseStatusAdd.click();
-                if ((await this.createNewStatusWindow.isExisting()) && (await this.caseStatusSaveButton.isExisting())) {
+                if ((await this.createNewStatusWindow.isDisplayed()) && (await this.caseStatusSaveButton.isDisplayed())) {
                     createWindowVisible = true;
                 } else {
                     retries++;
@@ -264,25 +266,48 @@ class CaseStatus extends Site {
         await this.editPencilNewStatus.moveTo();
         await this.editPencilNewStatus.click();
     }
+    async navActiveEdit() {
+        await this.editPencilActiveStatus.moveTo();
+        await this.editPencilActiveStatus.click();
+    }
+    async navCompletedEdit() {
+        await this.editPencilCompletedStatus.moveTo();
+        await this.editPencilCompletedStatus.click();
+    }
+    async navClosedEdit() {
+        await this.editPencilClosedStatus.moveTo();
+        await this.editPencilClosedStatus.click();
+    }
+    async navRemovedEdit() {
+        await this.editPencilRemovedStatus.moveTo();
+        await this.editPencilRemovedStatus.click();
+    }
     async statusGeneration() {
         const status = CaseTypes.generateRandomEntry();
         await this.caseStatusStatus.setValue(status);
         await this.caseStatusSaveButton.click();
         await expect (this.createdStatusAll).toExist();
     }
-    async generateRandomDescription() {
-        this.savedRandomSentence = String(faker.lorem.sentence(2));
-            if (this.savedRandomSentence.length > 200) {
-                this.savedRandomSentence = this.savedRandomSentence.substring(0, 197) + "..."
+    generateRandomDescription() {
+        const newDescription = String(faker.lorem.sentence(2));
+            if (this.newDescription.length > 200) {
+                this.newDescription = this.newDescritpion.substring(0, 197) + "..."
             }
+        this.savedRandomSentence = newDescription
+        this.allRandomDescriptions.push(newDescription)
         return this.savedRandomSentence;
-        }
+    }
     async descriptionGeneration() {
         const description = await this.generateRandomDescription();
         await this.caseStatusDescription.setValue(description);
         await this.caseStatusSaveButton.click();
         await this.createdStatusAll.moveTo();
         await expect(this.createdStatusDescriptionAll).toExist();
+    }
+    async verifyAllDescriptions() {
+        //have to find selectors for each entered status name, 
+        //move to each one based on array position,
+        //verify entered description based on array position
     }
 }
 export default new CaseStatus();

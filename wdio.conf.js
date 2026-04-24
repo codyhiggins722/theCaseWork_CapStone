@@ -50,7 +50,13 @@ export const config = {
     // https://saucelabs.com/platform/platform-configurator
     //
     capabilities: [{
-        browserName: 'chrome'
+        browserName: 'chrome',
+        'goog:ChromeOptions': {
+            args: [
+                '--window-size=1920,1080',
+                '--start-maximized'
+            ]
+        }
     }],
 
     //
