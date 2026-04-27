@@ -56,7 +56,6 @@ class CaseTypes extends Site {
         console.log(`The field capped out at ${currLength}`);
     }
     async verifyAllEntries() {
-        await browser.refresh()
         for (const allRandomLabel of this.allRandomLabels) {
             const arraylabel = $(`//span[contains(text(), "${allRandomLabel}")]`)
             await expect (arraylabel).toExist();

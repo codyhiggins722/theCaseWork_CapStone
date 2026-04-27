@@ -6,20 +6,8 @@ class CaseStatus extends Site {
     savedRandomSentence = '';
     allRandomDescriptions = [];
 
-    get newInfoBubble() {
-        return $('//label[text()="New"]/following-sibling::button')
-    }
-    get activeInfoBubble() {
-        return $('//label[text()="Active"]/following-sibling::button')
-    }
-    get completedInfoBubble() {
-        return $('//label[text()="Completed"]/following-sibling::button')
-    }
-    get closedInfoBubble() {
-        return $('//label[text()="Closed"]/following-sibling::button')
-    }
-    get removedInfoBubble() {
-        return $('//label[text()="Removed"]/following-sibling::button')
+    infoBubble(bubbleName) {
+        return $(`//label[text()="${bubbleName}"]/following-sibling::button`)
     }
     get newPopupInfo() {
         return $('//div[contains(text(),"System status denoting a newly created case.")]')
@@ -36,50 +24,14 @@ class CaseStatus extends Site {
     get removedPopupInfo() {
         return $('//div[contains(text(),"System status denoting a removed case.")]')
     }
-    get newCaseStatusAdd() {
-        return $('button[data-testid="add-case-status-New"]')
+    caseStatusAdd(statusBtnName) {
+        return $(`button[data-testid="add-case-status-${statusBtnName}"]`)
     }
-    get activeCaseStatusAdd() {
-        return $('button[data-testid="add-case-status-Active"]')
+    createStatusWindow(statusWindowName) {
+        return $(`//div/span[contains(text(), "${statusWindowName}")]`)
     }
-    get completedCaseStatusAdd() {
-        return $('button[data-testid="add-case-status-Completed"]')
-    }
-    get closedCaseStatusAdd() {
-        return $('button[data-testid="add-case-status-Closed"]')
-    }
-    get removedCaseStatusAdd() {
-        return $('button[data-testid="add-case-status-Removed"]')
-    }
-    get createNewStatusWindow() {
-        return $('//div/span[contains(text(), "New")]')
-    }
-    get createActiveStatusWindow() {
-        return $('//div/span[contains(text(), "Active")]')
-    }
-    get createCompletedStatusWindow() {
-        return $('//div/span[contains(text(), "Completed")]')
-    }
-    get createClosedStatusWindow() {
-        return $('//div/span[contains(text(), "Closed")]')
-    }
-    get createRemovedStatusWindow() {
-        return $('//div/span[contains(text(), "Removed")]')
-    }
-    get editPencilNewStatus() {
-        return $(`button[data-testid="case-status-edit-New-${CaseTypes.savedRandomLabel}"]`)
-    }
-    get editPencilActiveStatus() {
-        return $(`button[data-testid="case-status-edit-Active-${CaseTypes.savedRandomLabel}"]`)
-    }
-    get editPencilCompletedStatus() {
-        return $(`button[data-testid="case-status-edit-Completed-${CaseTypes.savedRandomLabel}"]`)
-    }
-    get editPencilClosedStatus() {
-        return $(`button[data-testid="case-status-edit-Closed-${CaseTypes.savedRandomLabel}"]`)
-    }
-    get editPencilRemovedStatus() {
-        return $(`button[data-testid="case-status-edit-Removed-${CaseTypes.savedRandomLabel}"]`)
+    editPencilStatus(statusPencilName) {
+        return $(`button[data-testid="case-status-edit-${statusPencilName}-${CaseTypes.savedRandomLabel}"]`)
     }
     get caseStatusStatus() {
         return $('input[data-testid="add-edit-status-status-input"]')
@@ -101,7 +53,7 @@ class CaseStatus extends Site {
         let popupVisible = false;
 
         while (retries < 5 && popupVisible === false) {
-            await this.newInfoBubble.click();
+            await this.infoBubble('New').click();
                 if (await this.newPopupInfo.isExisting()) {
                     popupVisible = true;
                 } else {
@@ -112,175 +64,60 @@ class CaseStatus extends Site {
                     console.log("Failed to display popup for 'New' bubble")
                 }
     }
-    async activeBubble() {
-        let retries = 0;
-        let popupVisible = false;
-
-        while (retries < 5 && popupVisible === false) {
-            await this.activeInfoBubble.click();
-                if (await this.activePopupInfo.isExisting()) {
-                    popupVisible = true;
-                } else {
-                    retries++;
-                }
-        }
-                if (!popupVisible) {
-                    console.log("Failed to display popup for 'Active' bubble")
-                }
-    }
-    async completedBubble() {
-        let retries = 0;
-        let popupVisible = false;
-
-        while (retries < 5 && popupVisible === false) {
-            await this.completedInfoBubble.click();
-                if (await this.completedPopupInfo.isExisting()) {
-                    popupVisible = true;
-                } else {
-                    retries++;
-                }
-        }
-                if (!popupVisible) {
-                    console.log("Failed to display popup for 'Completed' bubble")
-                }
-    }
-    async closedBubble() {
-        let retries = 0;
-        let popupVisible = false;
-
-        while (retries < 5 && popupVisible === false) {
-            await this.closedInfoBubble.click();
-                if (await this.closedPopupInfo.isExisting()) {
-                    popupVisible = true;
-                } else {
-                    retries++;
-                }
-        }
-                if (!popupVisible) {
-                    console.log("Failed to display popup for 'Closed' bubble")
-                }
-    }
-    async removedBubble() {
-        let retries = 0;
-        let popupVisible = false;
-
-        while (retries < 5 && popupVisible === false) {
-            await this.removedInfoBubble.click();
-                if (await this.removedPopupInfo.isExisting()) {
-                    popupVisible = true;
-                } else {
-                    retries++;
-                }
-        }
-                if (!popupVisible) {
-                    console.log("Failed to display popup for 'Removed' bubble")
-                }
-    }
     async navNewStatus() {
-        let retries = 0;
-        let createWindowVisible = false;
-
-        while (retries < 5 && createWindowVisible === false) {
-            await this.newCaseStatusAdd
-            await this.newCaseStatusAdd.moveTo();
-            await this.newCaseStatusAdd.click();
-                if ((await this.createNewStatusWindow.isDisplayed()) && (await this.caseStatusSaveButton.isDisplayed())) {
-                    createWindowVisible = true;
-                } else {
-                    retries++;
-                }
-        }
-                if (!createWindowVisible) {
-                    console.log("'New' Case Status Creation Window didn't appear")
-                }
+        await browser.waitUntil(async () => {
+            try {
+                await this.caseStatusAdd('New').click();
+                await this.createStatusWindow('New').waitForDisplayed({timeout:3000})
+                await this.statusGeneration()
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }, {
+            timeout: 20000,
+            interval: 1000
+        });
     }
     async navActiveStatus() {
-        let retries = 0;
-        let createWindowVisible = false;
-
-        while (retries < 5 && createWindowVisible === false) {
-            await this.activeCaseStatusAdd.moveTo();
-            await this.activeCaseStatusAdd.click();
-                if (await this.createActiveStatusWindow.isExisting()) {
-                    createWindowVisible = true;
-                } else {
-                    retries++;
-                }
-        }
-                if (!createWindowVisible) {
-                    console.log("'Active' Case Status Creation Window didn't appear")
-                }
+        await this.caseStatusAdd('Active').moveTo();
+        await this.caseStatusAdd('Active').click();
+        await this.createStatusWindow('Active').isDisplayed();
     }
     async navCompletedStatus() {
-        let retries = 0;
-        let createWindowVisible = false;
-
-        while (retries < 5 && createWindowVisible === false) {
-            await this.completedCaseStatusAdd.moveTo();
-            await this.completedCaseStatusAdd.click();
-                if (await this.createCompletedStatusWindow.isExisting()) {
-                    createWindowVisible = true;
-                } else {
-                    retries++;
-                }
-        }
-                if (!createWindowVisible) {
-                    console.log("'Completed' Case Status Creation Window didn't appear")
-                }
+        await this.caseStatusAdd('Completed').moveTo();
+        await this.caseStatusAdd('Completed').click();
+        await this.createStatusWindow('Completed').isDisplayed();
     }
     async navClosedStatus() {
-        let retries = 0;
-        let createWindowVisible = false;
-
-        while (retries < 5 && createWindowVisible === false) {
-            await this.closedCaseStatusAdd.moveTo();
-            await this.closedCaseStatusAdd.click();
-                if (await this.createClosedStatusWindow.isExisting()) {
-                    createWindowVisible = true;
-                } else {
-                    retries++;
-                }
-        }
-                if (!createWindowVisible) {
-                    console.log("'Closed' Case Status Creation Window didn't appear")
-                }
+        await this.caseStatusAdd('Closed').moveTo();
+        await this.caseStatusAdd('Closed').click();
+        await this.createStatusWindow('Closed').isDisplayed();
     }
     async navRemovedStatus() {
-        let retries = 0;
-        let createWindowVisible = false;
-
-        while (retries < 5 && createWindowVisible === false) {
-            await this.removedCaseStatusAdd.moveTo();
-            await this.removedCaseStatusAdd.click();
-                if (await this.createRemovedStatusWindow.isExisting()) {
-                    createWindowVisible = true;
-                } else {
-                    retries++;
-                }
-        }
-                if (!createWindowVisible) {
-                    console.log("'Removed' Case Status Creation Window didn't appear")
-                }
+        await this.caseStatusAdd('Removed').moveTo();
+        await this.caseStatusAdd('Removed').click();
+        await this.createStatusWindow('Removed').isDisplayed();
     }
     async navNewEdit() {
-        await this.editPencilNewStatus.moveTo();
-        await this.editPencilNewStatus.click();
+        await this.editPencilStatus('New').moveTo();
+        await this.editPencilStatus('New').click();
     }
     async navActiveEdit() {
-        await this.editPencilActiveStatus.moveTo();
-        await this.editPencilActiveStatus.click();
+        await this.editPencilStatus('Active').moveTo();
+        await this.editPencilStatus('Active').click();
     }
     async navCompletedEdit() {
-        await this.editPencilCompletedStatus.moveTo();
-        await this.editPencilCompletedStatus.click();
+        await this.editPencilStatus('Completed').moveTo();
+        await this.editPencilStatus('Completed').click();
     }
     async navClosedEdit() {
-        await this.editPencilClosedStatus.moveTo();
-        await this.editPencilClosedStatus.click();
+        await this.editPencilStatus('Closed').moveTo();
+        await this.editPencilStatus('Closed').click();
     }
     async navRemovedEdit() {
-        await this.editPencilRemovedStatus.moveTo();
-        await this.editPencilRemovedStatus.click();
+        await this.editPencilStatus('Removed').moveTo();
+        await this.editPencilStatus('Removed').click();
     }
     async statusGeneration() {
         const status = CaseTypes.generateRandomEntry();
@@ -290,8 +127,8 @@ class CaseStatus extends Site {
     }
     generateRandomDescription() {
         const newDescription = String(faker.lorem.sentence(2));
-            if (this.newDescription.length > 200) {
-                this.newDescription = this.newDescritpion.substring(0, 197) + "..."
+            if (newDescription.length > 200) {
+                newDescription = newDescription.substring(0, 197) + "..."
             }
         this.savedRandomSentence = newDescription
         this.allRandomDescriptions.push(newDescription)
@@ -305,9 +142,10 @@ class CaseStatus extends Site {
         await expect(this.createdStatusDescriptionAll).toExist();
     }
     async verifyAllDescriptions() {
-        //have to find selectors for each entered status name, 
-        //move to each one based on array position,
-        //verify entered description based on array position
+        for (const allRandomDescription of this.allRandomDescriptions) {
+            const arrayDescriptions = $(`//div[contains(text(), "${allRandomDescription}")]`)
+            await expect (arrayDescriptions).toExist();
+        }
     }
 }
 export default new CaseStatus();

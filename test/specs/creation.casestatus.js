@@ -12,7 +12,6 @@ describe('theCaseWork verify ability to create a Case Status under each category
     });
     it('should create a "New" Case Status', async() => {
         await CaseStatus.navNewStatus();
-        await CaseStatus.statusGeneration();
     });
     it('should create an "Active" Case Status', async() => {
         await CaseStatus.navActiveStatus();

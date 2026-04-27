@@ -11,7 +11,6 @@ describe('theCaseWork verify ability to create a Case Status under each category
     });
     it('should create a "New" Case Status, then add a description to it', async() => {
         await CaseStatus.navNewStatus();
-        await CaseStatus.statusGeneration();
         await CaseStatus.navNewEdit();
         await CaseStatus.descriptionGeneration();
     });
@@ -40,6 +39,13 @@ describe('theCaseWork verify ability to create a Case Status under each category
         await CaseStatus.descriptionGeneration();
     });
     it('should refresh the browser and verify all descriptions are still there', async() => {
-
+        await browser.refresh()
+        await CaseStatus.verifyAllDescriptions()
+    });
+    it('should logout and log back in and verify all descriptions are still there', async() => {
+        await Access.logout()
+        await Access.login();
+        await Access.cdtNav();
+        await CaseStatus.verifyAllDescriptions();
     });
 })

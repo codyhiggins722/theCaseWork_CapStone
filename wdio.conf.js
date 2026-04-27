@@ -51,10 +51,13 @@ export const config = {
     //
     capabilities: [{
         browserName: 'chrome',
-        'goog:ChromeOptions': {
+        acceptInsecureCerts: true,
+        'goog:chromeOptions': {
             args: [
                 '--window-size=1920,1080',
-                '--start-maximized'
+                '--start-maximized',
+                '--disable-gpu',
+                '--no-sandbox'
             ]
         }
     }],
