@@ -45,6 +45,7 @@ class ExpenseTypes extends Site {
 
         } while (currLength > prevLength);
         console.log(`The field capped out at ${currLength}`);
+        await expect (currLength).toBe(50)
     }
 }
 export default new ExpenseTypes();

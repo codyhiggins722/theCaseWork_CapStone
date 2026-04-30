@@ -54,11 +54,18 @@ class CaseTypes extends Site {
 
         } while (currLength > prevLength);
         console.log(`The field capped out at ${currLength}`);
+        await expect (currLength).toBe(75)
     }
     async verifyAllEntries() {
         for (const allRandomLabel of this.allRandomLabels) {
             const arraylabel = $(`//span[contains(text(), "${allRandomLabel}")]`)
             await expect (arraylabel).toExist();
+        }
+    }
+    async verifyAllEntriesGone() {
+        for (const allRandomLabel of this.allRandomLabels) {
+            const arraylabel = $(`//span[contains(text(), "${allRandomLabel}")]`)
+            await expect (arraylabel).not.toExist();
         }
     }
 }

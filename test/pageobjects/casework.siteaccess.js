@@ -23,6 +23,18 @@ class Access extends Site {
     get caseDataTypesHeader(){
         return $('//label/span[contains(text(),"Case Data Types")]')
         }
+    get accountSettings(){
+        return $('[data-testid="vert-nav-account-settings"]')
+    }
+    get usersTab(){
+        return $('[data-testid="account-settings-users-tab"]')
+    }
+    get meUser(){
+        return $('//div[.//span[contains(text(),"CODY.HIGGINS")]]/following-sibling::div[@role="gridcell"][3]//child::button[@aria-label="Edit"]')
+    }
+    get editUserForm(){
+        return $('[value="CODY.HIGGINS9046@STU.MTEC.EDU"]')
+    }
     get logoutButton() {
         return $('[data-testid="menu-logout-button"]')
         }
@@ -41,5 +53,12 @@ class Access extends Site {
         await this.caseDataTypesbtn.click();
         await expect(this.caseDataTypesHeader).toBeExisting();
         }
+    async userFormNav(){
+        await this.accountSettings.click();
+        await this.usersTab.click();
+        await this.meUser.moveTo();
+        await this.meUser.click()
+        await expect (this.editUserForm).toExist();
+    }
 }
 export default new Access();

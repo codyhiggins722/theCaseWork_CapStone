@@ -48,6 +48,12 @@ class CaseStatus extends Site {
     get createdStatusDescriptionAll() {
         return $(`//div[contains(text(), "${this.savedRandomSentence}")]`)
     }
+    removeStatusButton(statusName) {
+        return $(`[data-testid="case-status-remove-${statusName}-${CaseTypes.savedRandomLabel}"]`)
+    }
+    get createStatusCancel() {
+        return $('[data-testid="add-edit-status-cancel-button"]')
+    }
     async newBubble() {
         let retries = 0;
         let popupVisible = false;
@@ -55,6 +61,70 @@ class CaseStatus extends Site {
         while (retries < 5 && popupVisible === false) {
             await this.infoBubble('New').click();
                 if (await this.newPopupInfo.isExisting()) {
+                    popupVisible = true;
+                } else {
+                    retries++;
+                }
+        }
+                if (!popupVisible) {
+                    console.log("Failed to display popup for 'New' bubble")
+                }
+    }
+    async activeBubble() {
+        let retries = 0;
+        let popupVisible = false;
+
+        while (retries < 5 && popupVisible === false) {
+            await this.infoBubble('Active').click();
+                if (await this.activePopupInfo.isExisting()) {
+                    popupVisible = true;
+                } else {
+                    retries++;
+                }
+        }
+                if (!popupVisible) {
+                    console.log("Failed to display popup for 'New' bubble")
+                }
+    }
+    async completedBubble() {
+        let retries = 0;
+        let popupVisible = false;
+
+        while (retries < 5 && popupVisible === false) {
+            await this.infoBubble('Completed').click();
+                if (await this.completedPopupInfo.isExisting()) {
+                    popupVisible = true;
+                } else {
+                    retries++;
+                }
+        }
+                if (!popupVisible) {
+                    console.log("Failed to display popup for 'New' bubble")
+                }
+    }
+    async closedBubble() {
+        let retries = 0;
+        let popupVisible = false;
+
+        while (retries < 5 && popupVisible === false) {
+            await this.infoBubble('Closed').click();
+                if (await this.closedPopupInfo.isExisting()) {
+                    popupVisible = true;
+                } else {
+                    retries++;
+                }
+        }
+                if (!popupVisible) {
+                    console.log("Failed to display popup for 'New' bubble")
+                }
+    }
+    async removedBubble() {
+        let retries = 0;
+        let popupVisible = false;
+
+        while (retries < 5 && popupVisible === false) {
+            await this.infoBubble('Removed').click();
+                if (await this.removedPopupInfo.isExisting()) {
                     popupVisible = true;
                 } else {
                     retries++;
@@ -76,6 +146,22 @@ class CaseStatus extends Site {
             }
         }, {
             timeout: 20000,
+            interval: 1000
+        });
+    }
+    async navNewStatusBoundary() {
+        await browser.waitUntil(async () => {
+            try {
+                await this.caseStatusAdd('New').click();
+                await this.createStatusWindow('New').waitForDisplayed({timeout:3000})
+                await this.typeUntilFullExpenseStatus();
+                await this.typeUntilFullExpenseDescription();
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }, {
+            timeout: 50000,
             interval: 1000
         });
     }
@@ -146,6 +232,76 @@ class CaseStatus extends Site {
             const arrayDescriptions = $(`//div[contains(text(), "${allRandomDescription}")]`)
             await expect (arrayDescriptions).toExist();
         }
+    }
+    async removeCreatedStatusNew() {
+        await this.removeStatusButton('New').moveTo();
+        await this.removeStatusButton('New').click();
+        await expect (this.createdStatusAll).not.toExist();
+    }
+    async removeCreatedStatusActive() {
+        await this.removeStatusButton('Active').moveTo();
+        await this.removeStatusButton('Active').click();
+        await expect (this.createdStatusAll).not.toExist();
+    }
+    async removeCreatedStatusCompleted() {
+        await this.removeStatusButton('Completed').moveTo();
+        await this.removeStatusButton('Completed').click();
+        await expect (this.createdStatusAll).not.toExist();
+    }
+    async removeCreatedStatusClosed() {
+        await this.removeStatusButton('Closed').moveTo();
+        await this.removeStatusButton('Closed').click();
+        await expect (this.createdStatusAll).not.toExist();
+    }
+    async removeCreatedStatusRemoved() {
+        await this.removeStatusButton('Removed').moveTo();
+        await this.removeStatusButton('Removed').click();
+        await expect (this.createdStatusAll).not.toExist();
+    }
+    async typeUntilFullExpenseStatus() {
+        const input = await this.caseStatusStatus;
+        await input.click();
+        await input.clearValue();
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ";
+        let prevLength = 0;
+        let currLength = 0;
+
+        do{
+            prevLength = (await this.caseStatusStatus.getValue()).length;
+
+            const randomChar = chars.charAt(Math.floor(Math.random() * chars.length));
+            await browser.keys(randomChar);
+
+            currLength = (await this.caseStatusStatus.getValue()).length;
+
+            if (currLength >= 100) break;
+
+        } while (currLength > prevLength);
+        console.log(`The status field capped out at ${currLength}`);
+        await expect (currLength).toBe(50)
+    }
+    async typeUntilFullExpenseDescription() {
+        const input = await this.caseStatusDescription;
+        await input.click();
+        await input.clearValue();
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ";
+        let prevLength = 0;
+        let currLength = 0;
+
+        do{
+            prevLength = (await this.caseStatusDescription.getValue()).length;
+
+            const randomChar = chars.charAt(Math.floor(Math.random() * chars.length));
+            await browser.keys(randomChar);
+
+            currLength = (await this.caseStatusDescription.getValue()).length;
+
+            if (currLength >= 300) break;
+
+        } while (currLength > prevLength);
+        console.log(`The description field capped out at ${currLength}`);
+        await expect (currLength).toBe(200)
+        await this.createStatusCancel.click();
     }
 }
 export default new CaseStatus();
