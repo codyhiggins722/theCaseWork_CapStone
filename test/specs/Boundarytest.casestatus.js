@@ -1,6 +1,5 @@
 import Access from '../pageobjects/casework.siteaccess'
 import CaseStatus from '../pageobjects/casework.casestatus'
-import Casetypes from '../pageobjects/casework.casetypes';
 
 describe('theCaseWork verify that entered status and description do not exceed bounds set for field', () => {
     it('log in and reach the dashboard', async ()=> {

@@ -1,6 +1,6 @@
 import Site from './casework.base'
 import CaseTypes from './casework.casetypes'
-import { faker } from '@faker-js/faker';
+import { faker } from '@faker-js/faker'
 
 class CaseStatus extends Site {
     savedRandomSentence = '';
