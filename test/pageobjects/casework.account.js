@@ -1,9 +1,11 @@
 import Site from './casework.base'
 import CaseTypes from './casework.casetypes'
+import Access from './casework.siteaccess'
 import { faker } from '@faker-js/faker'
 
 class Account extends Site {
     savedPhoneNumber = '';
+    allSavedPhoneNumbers = [];
     get nameField(){
         return $('[name="name"]')
     }
@@ -35,7 +37,7 @@ class Account extends Site {
         return $(`option[data-testid="edit-user-phone-type-option-${type}"]`)
     }
     get updateButton(){
-        return $('[data-testid="edit-user=update-button"]')
+        return $('[data-testid="edit-user-update-button"]')
     }
     phoneType(type){
         return $(`//span[contains(text(), "${type}")]`)
@@ -46,16 +48,21 @@ class Account extends Site {
     get enteredPhoneNumber(){
         return $(`[value="${this.savedPhoneNumber}"]`)
     }
+    blankValues(field){
+        return $(`[data-testid="edit-user-${field}-input"][value=""]`)
+    }
     generatePhoneNumber() {
         const newNumber = faker.string.numeric(10);
         this.savedPhoneNumber = newNumber;
+        this.allSavedPhoneNumbers.push(newNumber);
         return this.savedPhoneNumber;
     }
     generateRandomShortEntry() {
         const shortEntry = faker.number.int({min: 1, max: 5})
         const newLabel = faker.string.numeric(shortEntry)
-        this.savedRandomLabel = newLabel;
-        return this.savedRandomLabel;
+        CaseTypes.savedRandomLabel = newLabel;
+        CaseTypes.allRandomLabels.push(newLabel);
+        return CaseTypes.savedRandomLabel;
     }
     async enterName(){
         const label = CaseTypes.generateRandomEntry();
@@ -137,9 +144,25 @@ class Account extends Site {
         await this.phoneField.setValue(label);
         await expect (this.enteredPhoneNumber).toExist();
     }
-    async clearAllField(){
+    async clearAllFields(){
         await this.nameField.click();
         await this.nameField.clearValue();
+        await this.hoursField.click();
+        await this.hoursField.clearValue();
+        await this.addressField.click();
+        await this.addressField.clearValue();
+        await this.cityField.click();
+        await this.cityField.clearValue();
+        await this.address2Field.click();
+        await this.address2Field.clearValue();
+        await this.stateField.click();
+        await this.stateField.clearValue();
+        await this.zipField.click();
+        await this.zipField.clearValue();
+        await this.phoneField.click();
+        await this.phoneField.clearValue();
+    }
+    async clearAllNonRequiredFields(){
         await this.hoursField.click();
         await this.hoursField.clearValue();
         await this.addressField.click();
@@ -165,6 +188,38 @@ class Account extends Site {
         await this.phoneDropdown.click();
         await this.phoneTypeSelection('Other').click();
         await expect (this.phoneType('Other')).toExist();
+    }
+    async verifyAllUserFacts() {
+        for (const allRandomLabel of CaseTypes.allRandomLabels) {
+            const arraylabel = $(`[value="${allRandomLabel}"]`)
+            await expect (arraylabel).toExist();
+        }
+    }
+    async verifyAllUserNumbers() {
+        for (const allSavedPhoneNumber of this.allSavedPhoneNumbers) {
+            const arraylabel = $(`[value="${allSavedPhoneNumber}"]`)
+            await expect (arraylabel).toExist();
+        }
+    }
+    async verificationExistence() {
+        await this.updateButton.click();
+        await expect (this.updateButton).not.toExist();
+        await browser.refresh();
+        await Access.meUser.moveTo();
+        await Access.meUser.click()
+        await expect (Access.editUserForm).toExist();
+        await this.verifyAllUserFacts();
+        await this.verifyAllUserNumbers();
+    }
+    async verificationVanished(){
+        await expect (this.blankValues('expected-hours')).toExist();
+        await expect (this.blankValues('address1')).toExist();
+        await expect (this.blankValues('city')).toExist();
+        await expect (this.blankValues('address2')).toExist();
+        await expect (this.blankValues('state')).toExist();
+        await expect (this.blankValues('zip')).toExist();
+        await expect (this.blankValues('phone')).toExist();
+        await browser.pause(7000)
     }
 }
 export default new Account();

@@ -2,11 +2,9 @@ import Access from '../pageobjects/casework.siteaccess'
 import CaseStatus from '../pageobjects/casework.casestatus'
 
 describe('theCaseWork verify that entered status and description do not exceed bounds set for field', () => {
-    it('log in and reach the dashboard', async ()=> {
+    it('log in and navigate to Case Data Types workspace', async ()=> {
         await Access.open();
         await Access.login();
-    });
-    it('should navigate to Case Data Types workspace', async ()=> {
         await Access.cdtNav();
     });
     it('should enter characters for "New" case status and description and ensure characters meet but do not exceed 50 and 200 respectively' , async() => {

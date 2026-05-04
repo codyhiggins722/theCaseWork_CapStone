@@ -2,11 +2,9 @@ import Access from '../pageobjects/casework.siteaccess'
 import ExpenseTypes from '../pageobjects/casework.expensetypes'
 
 describe('theCaseWork CRUD test for Expense Type workspace', () => {
-    it('log in and reach the dashboard', async ()=> {
+    it('log in and navigate to the Case Data Types workspace', async ()=> {
         await Access.open();
         await Access.login();
-    });
-    it('should navigate to Case Data Types workspace', async ()=> {
         await Access.cdtNav();
     });
     it('should enter a new expense type and verify it appears', async ()=> {
