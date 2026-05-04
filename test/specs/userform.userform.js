@@ -10,6 +10,7 @@ describe('theCaseWork Postive Test for Edit User Form', () => {
         await Access.userFormNav();
     });
     it('should enter data into each field and verify data is entered', async ()=> {
+        await Account.clearAllField();
         await Account.enterName();
         await Account.enterHours();
         await Account.enterAddress1();
@@ -18,5 +19,8 @@ describe('theCaseWork Postive Test for Edit User Form', () => {
         await Account.enterState();
         await Account.enterZip();
         await Account.enterPhone();
+    });
+    it('should verify each dropdown option for Phone Type updates correctly', async ()=> {
+        await Account.checkDropdown();
     });
 })

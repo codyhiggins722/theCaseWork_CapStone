@@ -31,8 +31,11 @@ class Account extends Site {
     get phoneDropdown(){
         return $('[name="phone.type"]')
     }
+    phoneTypeSelection(type){
+        return $(`option[data-testid="edit-user-phone-type-option-${type}"]`)
+    }
     get updateButton(){
-        return $('data-testid="edit-user=update-button"]')
+        return $('[data-testid="edit-user=update-button"]')
     }
     phoneType(type){
         return $(`//span[contains(text(), "${type}")]`)
@@ -134,8 +137,34 @@ class Account extends Site {
         await this.phoneField.setValue(label);
         await expect (this.enteredPhoneNumber).toExist();
     }
+    async clearAllField(){
+        await this.nameField.click();
+        await this.nameField.clearValue();
+        await this.hoursField.click();
+        await this.hoursField.clearValue();
+        await this.addressField.click();
+        await this.addressField.clearValue();
+        await this.cityField.click();
+        await this.cityField.clearValue();
+        await this.address2Field.click();
+        await this.address2Field.clearValue();
+        await this.stateField.click();
+        await this.stateField.clearValue();
+        await this.zipField.click();
+        await this.zipField.clearValue();
+        await this.phoneField.click();
+        await this.phoneField.clearValue();
+    }
     async checkDropdown(){
-
+        await this.phoneDropdown.click();
+        await this.phoneTypeSelection('Office').click();
+        await expect (this.phoneType('Office')).toExist();
+        await this.phoneDropdown.click();
+        await this.phoneTypeSelection('Cell').click();
+        await expect (this.phoneType('Cell')).toExist();
+        await this.phoneDropdown.click();
+        await this.phoneTypeSelection('Other').click();
+        await expect (this.phoneType('Other')).toExist();
     }
 }
 export default new Account();
