@@ -24,8 +24,22 @@ describe('theCaseWork Postive Test for Edit User Form', () => {
     it('should click Update, refresh the page, and verify everything is still there', async ()=> {
         await Account.verificationExistence();
     })
-    it('should clear all non required entries, refresh, and confirm they are now no longer there', async ()=> {
+    it('should clear all non required entries, refresh, and confirm the entries are still there', async ()=> {
         await Account.clearAllNonRequiredFields();
         await Account.verificationVanished();
+        await Account.verificationExistenceNoUpdate
     });
+    it('should add new entries, update, log out and in, and confirm entries are still there', async ()=> {
+        await Account.clearAllFields();
+        await Account.fieldEntryRedux();
+        await Account.verificationExistenceLogOut();
+    })
+    it('should clear all non required entries, log out and in, and verify all changed entries are blank', async ()=> {
+        await Account.clearAllNonRequiredFields();
+        await Account.verificationVanishedSaved();
+        await Access.logout();
+        await Access.login();
+        await Access.userFormNav();
+        await Account.verifyBlankValues();
+    })
 })
