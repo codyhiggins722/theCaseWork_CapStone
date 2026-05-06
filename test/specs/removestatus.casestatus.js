@@ -4,7 +4,7 @@ import Casetypes from '../pageobjects/casework.casetypes';
 
 describe('theCaseWork verify ability to create a Case Status under each category and then remove them', () => {
     it('log in and navigate to the Case Data Types workspace', async ()=> {
-        await Access.open();
+        await Access.start();
         await Access.login();
         await Access.cdtNav();
     });

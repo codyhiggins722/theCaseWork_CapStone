@@ -1,7 +1,7 @@
 import { browser } from '@wdio/globals'
 
 export default class Site{
-    open (){
+    start (){
         return browser.url('https://app.thecasework.com/')
     
     }

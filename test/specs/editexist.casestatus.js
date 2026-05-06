@@ -3,7 +3,7 @@ import CaseStatus from '../pageobjects/casework.casestatus'
 
 describe('theCaseWork verify ability to create a Case Status under each category and then edit it by adding a description', () => {
     it('log in and navigate to the Case Data Types workspace', async ()=> {
-        await Access.open();
+        await Access.start();
         await Access.login();
         await Access.cdtNav();
     });

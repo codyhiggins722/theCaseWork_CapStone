@@ -3,7 +3,7 @@ import ExpenseTypes from '../pageobjects/casework.expensetypes'
 
 describe('theCaseWork CRUD test for Expense Type workspace', () => {
     it('log in and navigate to the Case Data Types workspace', async ()=> {
-        await Access.open();
+        await Access.start();
         await Access.login();
         await Access.cdtNav();
     });

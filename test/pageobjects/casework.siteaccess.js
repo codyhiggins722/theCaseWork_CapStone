@@ -57,7 +57,7 @@ class Access extends Site {
         await this.accountSettings.click();
         await this.usersTab.click();
         await this.meUser.moveTo();
-        await this.meUser.click()
+        await this.meUser.click();
         await expect (this.editUserForm).toExist();
     }
 }

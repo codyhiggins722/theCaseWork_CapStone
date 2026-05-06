@@ -3,7 +3,7 @@ import CaseStatus from '../pageobjects/casework.casestatus'
 
 describe('theCaseWork verify informational bubbles provide correct info', () => {
     it('log in and navigate to the Case Data Types workspace', async ()=> {
-        await Access.open();
+        await Access.start();
         await Access.login();
         await Access.cdtNav();
     });

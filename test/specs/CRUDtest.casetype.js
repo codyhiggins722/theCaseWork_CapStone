@@ -3,7 +3,7 @@ import CaseTypes from '../pageobjects/casework.casetypes'
 
 describe('theCaseWork CRUD test for Case Type workspace', () => {
     it('log in and navigate to the Case Data Types workspace', async ()=> {
-        await Access.open();
+        await Access.start();
         await Access.login();
         await Access.cdtNav();
     });

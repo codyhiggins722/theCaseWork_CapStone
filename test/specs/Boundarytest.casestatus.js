@@ -3,7 +3,7 @@ import CaseStatus from '../pageobjects/casework.casestatus'
 
 describe('theCaseWork verify that entered status and description do not exceed bounds set for field', () => {
     it('log in and navigate to Case Data Types workspace', async ()=> {
-        await Access.open();
+        await Access.start();
         await Access.login();
         await Access.cdtNav();
     });

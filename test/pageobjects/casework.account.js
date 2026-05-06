@@ -10,6 +10,21 @@ class Account extends Site {
     allSecondLabels = [];
     secondNumber = '';
     allSecondNumbers = [];
+    savedState = '';
+    nameVal = ''; 
+    hoursVal = ''; 
+    addressVal = ''; 
+    cityVal = ''; 
+    address2Val = '';
+    zipVal = '';
+    phoneVal = '';
+    nameValRedux = '';
+    hoursValRedux = ''; 
+    addressValRedux = ''; 
+    cityValRedux = ''; 
+    address2ValRedux = '';
+    zipValRedux = '';
+    phoneValRedux = '';
     get nameField(){
         return $('[name="name"]')
     }
@@ -68,8 +83,8 @@ class Account extends Site {
         const shortEntry = faker.number.int({min: 1, max: 5})
         const newLabel = faker.string.numeric(shortEntry)
         CaseTypes.savedRandomLabel = newLabel;
-        CaseTypes.allRandomLabels.push(newLabel);
-        return CaseTypes.savedRandomLabel;
+        this.savedState = newLabel;
+        return newLabel;
     }
      generateRandomEntryAgain() {
         const newLabel = faker.word.adjective() + ' ' + faker.word.noun();
@@ -81,174 +96,69 @@ class Account extends Site {
         const newNumber = faker.string.numeric(10);
         this.secondNumber = newNumber;
         this.allSecondNumbers.push(newNumber);
+        this.savedPhoneNumber = newNumber;
         return this.secondNumber;
     }
     generateRandomShortEntryAgain() {
         const shortEntry = faker.number.int({min: 1, max: 5})
         const newLabel = faker.string.numeric(shortEntry)
         this.secondLabel = newLabel;
-        this.allSecondLabels.push(newLabel);
-        return this.secondLabel;
+        this.savedState = newLabel;
+        return newLabel;
     }
-    async enterName(){
+    async enterAlphaEntry(element){
         const label = CaseTypes.generateRandomEntry();
-        await this.nameField.doubleClick();
-        await this.nameField.clearValue();
-            if(await this.nameField.getValue() !== "") {
-                await this.nameField.clearValue();
+        await element.doubleClick();
+        await element.clearValue();
+            if(await element.getValue() !== "") {
+                await element.clearValue();
             }
-        await this.nameField.setValue(label);
-        await expect (this.enteredValue).toExist();
+        await element.setValue(label);
+        return label;
     }
-    async enterHours(){
+    async enterNumberEntry(element){
         const label = this.generatePhoneNumber();
-        await this.hoursField.doubleClick();
-        await this.hoursField.clearValue();
-            if(await this.hoursField.getValue() !== "") {
-                await this.hoursField.clearValue();
+        await element.doubleClick();
+        await element.clearValue();
+            if(await element.getValue() !== "") {
+                await element.clearValue();
             }
-        await this.hoursField.setValue(label);
-        await expect (this.enteredPhoneNumber).toExist();
-    }
-    async enterAddress1(){
-        const label = CaseTypes.generateRandomEntry();
-        await this.addressField.doubleClick();
-        await this.addressField.clearValue();
-            if(await this.addressField.getValue() !== "") {
-                await this.addressField.clearValue();
-            }
-        await this.addressField.setValue(label);
-        await expect (this.enteredValue).toExist();
-    }
-    async enterCity(){
-        const label = CaseTypes.generateRandomEntry();
-        await this.cityField.doubleClick();
-        await this.cityField.clearValue();
-            if(await this.cityField.getValue() !== "") {
-                await this.cityField.clearValue();
-            }
-        await this.cityField.setValue(label);
-        await expect (this.enteredValue).toExist();
-    }
-    async enterAddress2(){
-        const label = CaseTypes.generateRandomEntry();
-        await this.address2Field.doubleClick();
-        await this.address2Field.clearValue();
-            if(await this.address2Field.getValue() !== "") {
-                await this.address2Field.clearValue();
-            }
-        await this.address2Field.setValue(label);
-        await expect (this.enteredValue).toExist();
+        await element.setValue(label);
+        return label;
     }
     async enterState(){
         const label = this.generateRandomShortEntry();
-        await this.stateField.doubleClick();
-        await this.stateField.clearValue();
-            if(await this.stateField.getValue() !== "") {
-                await this.stateField.clearValue();
-            }
+        this.savedState = label;
         await this.stateField.setValue(label);
-        await expect (this.enteredValue).toExist();
-    }
-    async enterZip(){
-        const label = this.generatePhoneNumber();
-        await this.zipField.doubleClick();
-        await this.zipField.clearValue();
-            if(await this.zipField.getValue() !== "") {
-                await this.zipField.clearValue();
-            }
-        await this.zipField.setValue(label);
-        await expect (this.enteredPhoneNumber).toExist();
-    }
-    async enterPhone(){
-        const label = this.generatePhoneNumber();
-        await this.phoneField.doubleClick();
-        await this.phoneField.clearValue();
-            if(await this.phoneField.getValue() !== "") {
-                await this.phoneField.clearValue();
-            }
-        await this.phoneField.setValue(label);
-        await expect (this.enteredPhoneNumber).toExist();
-    }
-    async enterNameRedux(){
-        const label = this.generateRandomEntryAgain();
-        await this.nameField.doubleClick();
-        await this.nameField.clearValue();
-            if(await this.nameField.getValue() !== "") {
-                await this.nameField.clearValue();
-            }
-        await this.nameField.setValue(label);
-        await expect (this.enteredValue).toExist();
-    }
-    async enterHoursRedux(){
-        const label = this.generatePhoneNumberAgain();
-        await this.hoursField.doubleClick();
-        await this.hoursField.clearValue();
-            if(await this.hoursField.getValue() !== "") {
-                await this.hoursField.clearValue();
-            }
-        await this.hoursField.setValue(label);
-        await expect (this.enteredPhoneNumber).toExist();
-    }
-    async enterAddress1Redux(){
-        const label = this.generateRandomEntryAgain();
-        await this.addressField.doubleClick();
-        await this.addressField.clearValue();
-            if(await this.addressField.getValue() !== "") {
-                await this.addressField.clearValue();
-            }
-        await this.addressField.setValue(label);
-        await expect (this.enteredValue).toExist();
-    }
-    async enterCityRedux(){
-        const label = this.generateRandomShortEntryAgain();
-        await this.cityField.doubleClick();
-        await this.cityField.clearValue();
-            if(await this.cityField.getValue() !== "") {
-                await this.cityField.clearValue();
-            }
-        await this.cityField.setValue(label);
-        await expect (this.enteredValue).toExist();
-    }
-    async enterAddress2Redux(){
-        const label = this.generateRandomEntryAgain();
-        await this.address2Field.doubleClick();
-        await this.address2Field.clearValue();
-            if(await this.address2Field.getValue() !== "") {
-                await this.address2Field.clearValue();
-            }
-        await this.address2Field.setValue(label);
-        await expect (this.enteredValue).toExist();
+        await expect(this.stateField).toHaveValue(this.savedState);
     }
     async enterStateRedux(){
         const label = this.generateRandomShortEntryAgain();
-        await this.stateField.doubleClick();
-        await this.stateField.clearValue();
-            if(await this.stateField.getValue() !== "") {
-                await this.stateField.clearValue();
-            }
+        this.savedState = label;
         await this.stateField.setValue(label);
-        await expect (this.enteredValue).toExist();
+        await expect(this.stateField).toHaveValue(this.savedState);
     }
-    async enterZipRedux(){
-        const label = this.generatePhoneNumberAgain();
-        await this.zipField.doubleClick();
-        await this.zipField.clearValue();
-            if(await this.zipField.getValue() !== "") {
-                await this.zipField.clearValue();
-            }
-        await this.zipField.setValue(label);
-        await expect (this.enteredPhoneNumber).toExist();
+    async enterAlphas(){
+        this.nameVal = await this.enterAlphaEntry(this.nameField);
+        this.addressVal = await this.enterAlphaEntry(this.addressField);
+        this.cityVal = await this.enterAlphaEntry(this.cityField);
+        this.address2Val = await this.enterAlphaEntry(this.address2Field);
     }
-    async enterPhoneRedux(){
-        const label = this.generatePhoneNumberAgain();
-        await this.phoneField.doubleClick();
-        await this.phoneField.clearValue();
-            if(await this.phoneField.getValue() !== "") {
-                await this.phoneField.clearValue();
-            }
-        await this.phoneField.setValue(label);
-        await expect (this.enteredPhoneNumber).toExist();
+    async enterNumbers(){
+        this.hoursVal = await this.enterNumberEntry(this.hoursField);
+        this.zipVal = await this.enterNumberEntry(this.zipField);
+        this.phoneVal = await this.enterNumberEntry(this.phoneField);
+    }
+    async enterAlphasRedux(){
+        this.nameValRedux = await this.enterAlphaEntry(this.nameField);
+        this.addressValRedux = await this.enterAlphaEntry(this.addressField);
+        this.cityValRedux = await this.enterAlphaEntry(this.cityField);
+        this.address2ValRedux = await this.enterAlphaEntry(this.address2Field);
+    }
+    async enterNumbersRedux(){
+        this.hoursValRedux = await this.enterNumberEntry(this.hoursField);
+        this.zipValRedux = await this.enterNumberEntry(this.zipField);
+        this.phoneValRedux = await this.enterNumberEntry(this.phoneField);
     }
     async clearAllFields(){
         await this.nameField.click();
@@ -294,38 +204,39 @@ class Account extends Site {
         await expect (this.phoneType('Other')).toExist();
     }
     async fieldEntryRedux(){
-        await this.enterNameRedux();
-        await this.enterHoursRedux();
-        await this.enterAddress1Redux();
-        await this.enterCityRedux();
-        await this.enterAddress2Redux();
+        await this.enterAlphaEntryRedux(this.nameField);
+        await this.enterNumberEntryRedux(this.hoursField);
+        await this.enterAlphaEntryRedux(this.addressField);
+        await this.enterAlphaEntryRedux(this.cityField);
+        await this.enterAlphaEntryRedux(this.address2Field);
         await this.enterStateRedux();
-        await this.enterZipRedux();
-        await this.enterPhoneRedux();
+        await this.enterNumberEntryRedux(this.zipField);
+        await this.enterNumberEntryRedux(this.phoneField);
     }
     async verifyAllUserFacts() {
-        for (const allRandomLabel of CaseTypes.allRandomLabels) {
-            const arraylabel = $(`[value="${allRandomLabel}"]`)
-            await expect (arraylabel).toExist();
-        }
+        await expect(this.nameField).toHaveValue(this.nameVal);
+        await expect(this.addressField).toHaveValue(this.addressVal);
+        await expect(this.cityField).toHaveValue(this.cityVal);
+        await expect(this.address2Field).toHaveValue(this.address2Val);
     }
     async verifyAllUserFactsAgain() {
-        for (const allSecondLabel of this.allSecondLabels) {
-            const arraylabel = $(`[value="${allSecondLabel}"]`)
-            await expect (arraylabel).toExist();
-        }
+        await expect(this.nameField).toHaveValue(this.nameValRedux);
+        await expect(this.addressField).toHaveValue(this.addressValRedux);
+        await expect(this.cityField).toHaveValue(this.cityValRedux);
+        await expect(this.address2Field).toHaveValue(this.address2ValRedux);
     }
     async verifyAllUserNumbers() {
-        for (const allSavedPhoneNumber of this.allSavedPhoneNumbers) {
-            const arraylabel = $(`[value="${allSavedPhoneNumber}"]`)
-            await expect (arraylabel).toExist();
-        }
+        await expect(this.hoursField).toHaveValue(this.hoursVal);
+        await expect(this.zipField).toHaveValue(this.zipVal);
+        await expect(this.phoneField).toHaveValue(this.phoneVal);
     }
     async verifyAllUserNumbersAgain() {
-        for (const allSecondNumber of this.allSecondNumbers) {
-            const arraylabel = $(`[value="${allSecondNumber}"]`)
-            await expect (arraylabel).toExist();
-        }
+        await expect(this.hoursField).toHaveValue(this.hoursValRedux);
+        await expect(this.zipField).toHaveValue(this.zipValRedux);
+        await expect(this.phoneField).toHaveValue(this.phoneValRedux);
+    }
+    async verifyStateValue(){
+        await expect(this.stateField).toHaveValue(this.savedState);
     }
     async verificationExistence() {
         await this.updateButton.click();
@@ -336,6 +247,7 @@ class Account extends Site {
         await expect (Access.editUserForm).toExist();
         await this.verifyAllUserFacts();
         await this.verifyAllUserNumbers();
+        await this.verifyStateValue();
     }
     async verificationExistenceNoUpdate() {
         await browser.refresh();
@@ -344,13 +256,14 @@ class Account extends Site {
         await expect (Access.editUserForm).toExist();
         await this.verifyAllUserFacts();
         await this.verifyAllUserNumbers();
+        await this.verifyStateValue();
     }
     async verificationExistenceLogOut() {
         await this.updateButton.click();
         await expect (this.updateButton).not.toExist();
-        await Access.logout
-        await Access.login
-        await Access.userFormNav
+        await Access.logout();
+        await Access.login();
+        await Access.userFormNav();
         await this.verifyAllUserFactsAgain();
         await this.verifyAllUserNumbersAgain();
     }
@@ -372,32 +285,24 @@ class Account extends Site {
             expect(actualValue).toBe("")
         }
     }
-    async verificationVanishedSaved(){
-        const fields = ['address1', 'city', 'address2', 'state', 'zip', 'phone'];
-        for (const name of fields) {
-            const field = this.blankValues(name);
-            await field.waitForExist();
-            let actualValue = await field.getValue();
-            let attempts = 0;
-            while (actualValue !== "" && attempts < 5) {
-                console.log(`${name} is not blank, it says: ${actualValue}`);
-                await field.click();
-                await field.clearValue();
-                await this.clearAllNonRequiredFields();
-                actualValue = await field.getValue();
-                attempts++;
-            }
-            expect(actualValue).toBe("")
+    async typeUntilFull(element, expectedLimit) {
+        await element.waitForClickable();
+        await element.click();
+        await element.clearValue();
+        let currLength = 0;
+        const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ";
+        currLength = (await element.getValue()).length;
+        while (true) {
+            const prevLength = currLength;
+            const randomChar = chars.charAt(Math.floor(Math.random() * chars.length));
+            await element.addValue(randomChar);
+            const currentVal = await element.getValue();
+            currLength = currentVal.length;
+            if (currLength === prevLength) break;
+
         }
-        await this.updateButton.click();
-    }
-    async verifyBlankValues(){
-        await expect (this.blankValuesVerify('address1')).toExist();
-        await expect (this.blankValuesVerify('city')).toExist();
-        await expect (this.blankValuesVerify('address2')).toExist();
-        await expect (this.blankValuesVerify('state')).toExist();
-        await expect (this.blankValuesVerify('zip')).toExist();
-        await expect (this.blankValuesVerify('phone')).toExist();
+        console.log(`The field capped out at ${currLength}`);
+        await expect (currLength).toBe(expectedLimit)
     }
 }
 export default new Account();
