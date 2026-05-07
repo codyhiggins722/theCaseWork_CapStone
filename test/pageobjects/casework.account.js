@@ -106,6 +106,20 @@ class Account extends Site {
         this.savedState = newLabel;
         return newLabel;
     }
+    generateRandomHours() {
+        const randomNumber = Math.floor(Math.random()*24)+1;
+        const newHours = randomNumber.toString();
+        this.randomHours = newHours;
+        this.hoursVal = newHours;
+        return newHours;
+    }
+    generateRandomHoursAgain() {
+        const randomNumber = Math.floor(Math.random()*24)+1;
+        const newHours = randomNumber.toString();
+        this.randomHours = newHours;
+        this.hoursValRedux = newHours;
+        return newHours;
+    }
     async enterAlphaEntry(element){
         const label = CaseTypes.generateRandomEntry();
         await element.doubleClick();
@@ -138,6 +152,18 @@ class Account extends Site {
         await this.stateField.setValue(label);
         await expect(this.stateField).toHaveValue(this.savedState);
     }
+    async enterHours(){
+        const label = this.generateRandomHours();
+        this.hoursVal = label;
+        await this.hoursField.setValue(label);
+        await expect(this.hoursField).toHaveValue(this.hoursVal);
+    }
+    async enterHoursRedux(){
+        const label = this.generateRandomHoursAgain();
+        this.hoursValRedux = label;
+        await this.hoursField.setValue(label);
+        await expect(this.hoursField).toHaveValue(this.hoursValRedux);
+    }
     async enterAlphas(){
         this.nameVal = await this.enterAlphaEntry(this.nameField);
         this.addressVal = await this.enterAlphaEntry(this.addressField);
@@ -145,7 +171,6 @@ class Account extends Site {
         this.address2Val = await this.enterAlphaEntry(this.address2Field);
     }
     async enterNumbers(){
-        this.hoursVal = await this.enterNumberEntry(this.hoursField);
         this.zipVal = await this.enterNumberEntry(this.zipField);
         this.phoneVal = await this.enterNumberEntry(this.phoneField);
     }
@@ -156,7 +181,6 @@ class Account extends Site {
         this.address2ValRedux = await this.enterAlphaEntry(this.address2Field);
     }
     async enterNumbersRedux(){
-        this.hoursValRedux = await this.enterNumberEntry(this.hoursField);
         this.zipValRedux = await this.enterNumberEntry(this.zipField);
         this.phoneValRedux = await this.enterNumberEntry(this.phoneField);
     }
@@ -205,7 +229,7 @@ class Account extends Site {
     }
     async fieldEntryRedux(){
         await this.enterAlphaEntryRedux(this.nameField);
-        await this.enterNumberEntryRedux(this.hoursField);
+        await this.enterHoursRedux();
         await this.enterAlphaEntryRedux(this.addressField);
         await this.enterAlphaEntryRedux(this.cityField);
         await this.enterAlphaEntryRedux(this.address2Field);
@@ -226,17 +250,21 @@ class Account extends Site {
         await expect(this.address2Field).toHaveValue(this.address2ValRedux);
     }
     async verifyAllUserNumbers() {
-        await expect(this.hoursField).toHaveValue(this.hoursVal);
         await expect(this.zipField).toHaveValue(this.zipVal);
         await expect(this.phoneField).toHaveValue(this.phoneVal);
     }
     async verifyAllUserNumbersAgain() {
-        await expect(this.hoursField).toHaveValue(this.hoursValRedux);
         await expect(this.zipField).toHaveValue(this.zipValRedux);
         await expect(this.phoneField).toHaveValue(this.phoneValRedux);
     }
     async verifyStateValue(){
         await expect(this.stateField).toHaveValue(this.savedState);
+    }
+    async verifyHoursValue(){
+        await expect(this.hoursField).toHaveValue(this.hoursVal);
+    }
+    async verifyHoursValueRedux(){
+        await expect(this.hoursField).toHaveValue(this.hoursValRedux);
     }
     async verificationExistence() {
         await this.updateButton.click();
@@ -248,6 +276,19 @@ class Account extends Site {
         await this.verifyAllUserFacts();
         await this.verifyAllUserNumbers();
         await this.verifyStateValue();
+        await this.verifyHoursValue();
+    }
+    async verificationExistenceRedux() {
+        await this.updateButton.click();
+        await expect (this.updateButton).not.toExist();
+        await browser.refresh();
+        await Access.meUser.moveTo();
+        await Access.meUser.click()
+        await expect (Access.editUserForm).toExist();
+        await this.verifyAllUserFactsAgain();
+        await this.verifyAllUserNumbersAgain();
+        await this.verifyStateValue();
+        await this.verifyHoursValueRedux();
     }
     async verificationExistenceNoUpdate() {
         await browser.refresh();
@@ -259,13 +300,13 @@ class Account extends Site {
         await this.verifyStateValue();
     }
     async verificationExistenceLogOut() {
-        await this.updateButton.click();
-        await expect (this.updateButton).not.toExist();
         await Access.logout();
         await Access.login();
         await Access.userFormNav();
         await this.verifyAllUserFactsAgain();
         await this.verifyAllUserNumbersAgain();
+        await this.verifyStateValue();
+        await this.verifyHoursValueRedux();
     }
     async verificationVanished(){
         const fields = ['address1', 'city', 'address2', 'state', 'zip', 'phone'];
@@ -298,7 +339,7 @@ class Account extends Site {
             await element.addValue(randomChar);
             const currentVal = await element.getValue();
             currLength = currentVal.length;
-            if (currLength === prevLength) break;
+            if (currLength === prevLength || currLength > 200) break;
 
         }
         console.log(`The field capped out at ${currLength}`);
