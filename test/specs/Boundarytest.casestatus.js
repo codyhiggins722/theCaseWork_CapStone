@@ -12,22 +12,22 @@ describe('theCaseWork verify that entered status and description do not exceed b
     });
     it('should enter characters for "Active" case status and description and ensure characters meet but do not exceed 50 and 200 respectively', async() => {
         await CaseStatus.navActiveStatus();
-        await CaseStatus.typeUntilFullExpenseStatus();
-        await CaseStatus.typeUntilFullExpenseDescription();
+        await CaseStatus.typeUntilFullExpenseStatus('Active');
+        await CaseStatus.typeUntilFullExpenseDescription('Active');
     });
     it('should enter characters for "Completed" case status and description and ensure characters meet but do not exceed 50 and 200 respectively', async() => {
         await CaseStatus.navCompletedStatus();
-        await CaseStatus.typeUntilFullExpenseStatus();
-        await CaseStatus.typeUntilFullExpenseDescription();
+        await CaseStatus.typeUntilFullExpenseStatus('Completed');
+        await CaseStatus.typeUntilFullExpenseDescription('Completed');
     });
     it('should enter characters for "Closed" case status and description and ensure characters meet but do not exceed 50 and 200 respectively', async() => {
         await CaseStatus.navClosedStatus();
-        await CaseStatus.typeUntilFullExpenseStatus();
-        await CaseStatus.typeUntilFullExpenseDescription();
+        await CaseStatus.typeUntilFullExpenseStatus('Closed');
+        await CaseStatus.typeUntilFullExpenseDescription('Closed');
     });
     it('should enter characters for "Removed" case status and description and ensure characters meet but do not exceed 50 and 200 respectively', async() => {
         await CaseStatus.navRemovedStatus();
-        await CaseStatus.typeUntilFullExpenseStatus();
-        await CaseStatus.typeUntilFullExpenseDescription();
+        await CaseStatus.typeUntilFullExpenseStatus('Removed');
+        await CaseStatus.typeUntilFullExpenseDescription('Removed');
     });
 })

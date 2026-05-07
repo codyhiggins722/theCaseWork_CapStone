@@ -51,6 +51,9 @@ class CaseStatus extends Site {
     removeStatusButton(statusName) {
         return $(`[data-testid="case-status-remove-${statusName}-${CaseTypes.savedRandomLabel}"]`)
     }
+    get removeAllExistStatus() {
+        return $$('button[data-testid*="case-status-remove"]')
+    }
     get createStatusCancel() {
         return $('[data-testid="add-edit-status-cancel-button"]')
     }
@@ -154,8 +157,8 @@ class CaseStatus extends Site {
             try {
                 await this.caseStatusAdd('New').click();
                 await this.createStatusWindow('New').waitForDisplayed({timeout:3000})
-                await this.typeUntilFullExpenseStatus();
-                await this.typeUntilFullExpenseDescription();
+                await this.typeUntilFullExpenseStatus('New');
+                await this.typeUntilFullExpenseDescription('New');
                 return true;
             } catch (e) {
                 return false;
@@ -233,6 +236,28 @@ class CaseStatus extends Site {
             await expect (arrayDescriptions).toExist();
         }
     }
+    async removeAllExisting() {
+        await browser.waitUntil(
+            async () => {
+                const buttons = await this.removeAllExistStatus;
+                return buttons.length > 0;
+            },
+            {
+                timeout: 5000,
+            }
+        );
+        let buttons = await this.removeAllExistStatus;
+        while (buttons.length > 0) {
+            await buttons[0].moveTo();
+            await buttons[0].click();
+            const currentCount = buttons.length;
+            await browser.waitUntil(
+                async () => (await this.removeAllExistStatus).length < currentCount,
+                {timeout: 3000}
+            );
+            buttons = await this.removeAllExistStatus;
+        }
+    }
     async removeCreatedStatusNew() {
         await this.removeStatusButton('New').moveTo();
         await this.removeStatusButton('New').click();
@@ -258,7 +283,7 @@ class CaseStatus extends Site {
         await this.removeStatusButton('Removed').click();
         await expect (this.createdStatusAll).not.toExist();
     }
-    async typeUntilFullExpenseStatus() {
+    async typeUntilFullExpenseStatus(windowName) {
         const input = await this.caseStatusStatus;
         await input.click();
         await input.clearValue();
@@ -267,6 +292,12 @@ class CaseStatus extends Site {
         let currLength = 0;
 
         do{
+            const windowVisible = await this.createStatusWindow(windowName).isExisting();
+                if (!windowVisible) {
+                    await this.caseStatusAdd(windowName).moveTo();
+                    await this.caseStatusAdd(windowName).click();
+                    await this.createStatusWindow(windowName).toExist();
+                }
             prevLength = (await this.caseStatusStatus.getValue()).length;
 
             const randomChar = chars.charAt(Math.floor(Math.random() * chars.length));
@@ -274,13 +305,13 @@ class CaseStatus extends Site {
 
             currLength = (await this.caseStatusStatus.getValue()).length;
 
-            if (currLength >= 100) break;
+            if (currLength >= 100 || !this.createStatusWindow(windowName).toExist()) break;
 
         } while (currLength > prevLength);
         console.log(`The status field capped out at ${currLength}`);
         await expect (currLength).toBe(50)
     }
-    async typeUntilFullExpenseDescription() {
+    async typeUntilFullExpenseDescription(windowName) {
         const input = await this.caseStatusDescription;
         await input.click();
         await input.clearValue();
@@ -289,6 +320,12 @@ class CaseStatus extends Site {
         let currLength = 0;
 
         do{
+             const windowVisible = await this.createStatusWindow(windowName).isExisting();
+                if (!windowVisible) {
+                    await this.caseStatusAdd(windowName).moveTo();
+                    await this.caseStatusAdd(windowName).click();
+                    await this.createStatusWindow(windowName).toExist();
+                }
             prevLength = (await this.caseStatusDescription.getValue()).length;
 
             const randomChar = chars.charAt(Math.floor(Math.random() * chars.length));

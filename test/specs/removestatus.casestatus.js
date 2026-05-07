@@ -8,7 +8,8 @@ describe('theCaseWork verify ability to create a Case Status under each category
         await Access.login();
         await Access.cdtNav();
     });
-    it('should create a "New" Case Status and then remove it', async() => {
+    it('should remove existing statuses, and create a "New" Case Status and then remove it', async() => {
+        await CaseStatus.removeAllExisting();
         await CaseStatus.navNewStatus();
         await CaseStatus.removeCreatedStatusNew();
     });
